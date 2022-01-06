@@ -98,14 +98,15 @@ def modify_col(c, b):
     # shrink the vote if there is no 1
     while list(c.values()).count("1") != 1 or get_index(c, "1") in b:
         vals = c.values()
-        if len([x for x in vals if x == float('nan') or x == ""]) > 0:  # empty col
+        if len([x for x in vals if x == float('nan') or x == ""]) == len(vals):  # empty col
                 return ""
 
         # if there is no 1
         elif "1" not in vals:
             for k in c:
-                if not (math.isnan(c[k]) or c[k] == "" or not c[k]):
-                    c[k] = str(int(c[k])-1)
+                if not c[k] == "":
+                    if not math.isnan(float(c[k])):
+                        c[k] = str(int(c[k])-1)
 
         # if 1 is a banned guy, remove and shrink
         idx = get_index(c, "1")
