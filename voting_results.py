@@ -122,17 +122,18 @@ def voting_function(df, position):
     first voting function, given a position specific data frame, returns the results and modified data frame.
     :return:
     """
+    logger = logging.getLogger("simple_example")
 
     # candidates
     candidates = dict(zip(df.index, df["candidate"]))
-    logging.info("The candidates are: {}".format(",".join(candidates.values())))
+    logger.info("The candidates are: {}".format(",".join(candidates.values())))
 
     # count result init
     count_result = {c: 0 for c in candidates.values()}
 
     # find winner loop
     store_cols = {c: [] for c in candidates.values()}
-    logging.info("counting votes")
+    logger.info("counting votes")
     winner = False
     df_dict = df.to_dict()
     banned = set()  # contains the excluded because least
@@ -154,13 +155,13 @@ def voting_function(df, position):
             if v > tot_sum - v:
                 winner = k
                 rep = "found a winner for position '{}': {}, with {} out of {} votes\n".format(position, winner, v, tot_sum)
-                logging.info(rep)
+                logger.info(rep)
                 return rep, pd.DataFrame.from_dict(df_dict)
         # no winner found
-        logging.info("winner not found for position {}".format(position))
+        logger.info("winner not found for position {}".format(position))
         least = min({k:v for k,v in count_result.items() if get_index(candidates, k) not in banned}, key=count_result.get)
         banned.add(get_index(candidates, least))
-        logging.info("least number of votes found for {} with {} out of {}". format(least, count_result[least], tot_sum))
+        logger.info("least number of votes found for {} with {} out of {}". format(least, count_result[least], tot_sum))
         count_result = {c: 0 for c in candidates.values()}
         for sub_col in store_cols[least]:
             if sub_col in df_dict:
