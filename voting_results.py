@@ -98,7 +98,7 @@ def modify_col(c, b):
     # shrink the vote if there is no 1
     while list(c.values()).count("1") != 1 or get_index(c, "1") in b:
         vals = c.values()
-        if len([x for x in vals if x == float('nan') or x != x or x == ""]) == len(vals):  # empty col
+        if len([x for x in vals if x == float('nan') or x != x or x == ""]) == len(vals) or list(vals).count('1') > 1:  # empty col or more than 1 pref
                 return ""
 
         # if there is no 1
